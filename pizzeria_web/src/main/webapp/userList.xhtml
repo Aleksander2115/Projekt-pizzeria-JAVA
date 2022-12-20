@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/templates/page-template.xhtml">
+	
+	<ui:define name="pageContent">
+	
+		<p:panel header="Lista użytkowników">
+		
+			<!-- <p:messages id="msg"/> -->
+		
+				<h:form id="form-table" style="margin-bottom:1em;">
+			
+					<p:dataTable value="#{userListBB.getFullList}" var="u">
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="ID użytkownika" />
+							</f:facet>
+							<h:outputText value="#{u.ID_Uzytkownik}" />
+						</p:column>
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Login" />
+							</f:facet>
+							<h:outputText value="#{u.login}" />
+						</p:column>						
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Hasło" />
+							</f:facet>
+							<h:outputText value="#{u.haslo}" />
+						</p:column>			
+			
+						<p:column priority="5">
+							<f:facet name="header">
+								<h:outputText value="imię" />
+							</f:facet>
+							<h:outputText value="#{u.imie}" />
+						</p:column>
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="nazwisko" />
+							</f:facet>
+							<h:outputText value="#{u.nazwisko}" />
+						</p:column>
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Numer telefonu" />
+							</f:facet>
+							<h:outputText value="#{u.nr_telefonu}" />
+						</p:column>						
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Miejscowość" />
+							</f:facet>
+							<h:outputText value="#{u.miejscowosc}" />
+						</p:column>			
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Kod pocztowy" />
+							</f:facet>
+							<h:outputText value="#{u.kod_pocztowy}" />
+						</p:column>			
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Ulica" />
+							</f:facet>
+							<h:outputText value="#{u.ulica}" />
+						</p:column>			
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Numer domu" />
+							</f:facet>
+							<h:outputText value="#{u.nr_domu}" />
+						</p:column>			
+			
+					</p:dataTable>
+				</h:form>
+		
+		</p:panel>
+	
+	</ui:define>
+</ui:composition>
+</html>

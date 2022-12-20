@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/templates/page-template.xhtml">
+	
+	<ui:define name="pageContent">
+	
+		<p:panel header="Rejestracja">
+		
+			<h:form id="bla">
+				<h:panelGrid id="grid" styleClass="ui-noborder" columns="3" celpadding="5">	
+		       		
+		       		<p:outputLabel for="u-login" value="Login:"/>
+		       		<p:inputText id="u-login" value="#{RegistrationBB.uzytkownik.login}" 
+		       			required="true" requiredMessage="Nie podano loginu" 
+		       			validatorMessage="co najwyżej 30 znaków">
+						<f:validateLength maximum="30" />
+					</p:inputText>
+		       		<p:message for="u-login" />
+				
+		       		<p:outputLabel for="u-haslo" value="Hasło:"/>
+		       		<p:inputText id="u-haslo" value="#{RegistrationBB.uzytkownik.haslo}" 
+		       			required="true" requiredMessage="Nie podano hasla" 
+		       			validatorMessage="co najwyżej 30 znaków">
+						<f:validateLength maximum="30" />
+					</p:inputText>
+		       		<p:message for="u-haslo" />		
+		       	
+		       		<p:outputLabel for="u-imie" value="Imię:"/>
+		       		<p:inputText id="u-imie" value="#{RegistrationBB.uzytkownik.imie}" 
+		       		required="true" requiredMessage="Nie podano imienia" 
+		       			validatorMessage="co najwyżej 30 znaków">
+						<f:validateLength maximum="30" />
+						</p:inputText>
+		       		<p:message for="u-imie" />
+		       		
+		       		<p:outputLabel for="u-nazwisko" value="Nazwisko:"/>
+		       		<p:inputText id="u-nazwisko" value="#{RegistrationBB.uzytkownik.nazwisko}" 
+		       			required="true" requiredMessage="Nie podano nazwiska" 
+		       			validatorMessage="co najwyżej 30 znaków">
+						<f:validateLength maximum="30" />
+					</p:inputText>
+		       		<p:message for="u-nazwisko" />	
+		       	
+		       		<p:outputLabel for="u-nr_telefonu" value="Numer telefonu:"/>
+		       		<p:inputText id="u-nr_telefonu" value="#{RegistrationBB.uzytkownik.nr_telefonu}" 
+		       			required="true" requiredMessage="Nie podano numeru telefonu" 
+		       			converterMessage="wymagana liczba całkowita" 
+		       			validatorMessage="co najwyzej 9 cyfr">
+		       			<f:validateDoubleRange maximum="9.0" />
+		       			</p:inputText>
+		       		<p:message for="u-nr_telefonu" />	
+		       		
+		       		<p:outputLabel for="u-miejscowosc" value="Miejscowość:"/>
+		       		<p:inputText id="u-miejscowosc" value="#{RegistrationBB.uzytkownik.miejscowosc}" 
+		       			required="true" requiredMessage="Nie podano miejscowości" 
+		       			validatorMessage="co najwyżej 40 znaków">
+						<f:validateLength maximum="40" />
+		       		</p:inputText>
+		       		<p:message for="u-miejscowosc" />	
+
+		       		<p:outputLabel for="u-kod_pocztowy" value="Kod pocztowy:"/>
+		       		<p:inputText id="u-kod_pocztowy" value="#{RegistrationBB.uzytkownik.kod_pocztowy}" 
+		       			required="true" requiredMessage="Nie podano kodu pocztowego" 
+		       			converterMessage="wymagana liczba całkowita" 
+		       			validatorMessage="co najwyzej 5 cyfr">
+		       			<f:validateDoubleRange maximum="5.0" />
+		       		</p:inputText>
+		       		<p:message for="u-kod_pocztowy" />
+		       		
+		       		<p:outputLabel for="u-ulica" value="Ulica:"/>
+		       		<p:inputText id="u-ulica" value="#{RegistrationBB.uzytkownik.ulica}" 
+		       			required="true" requiredMessage="Nie podano ulicy" 
+		       			validatorMessage="co najwyżej 30 znaków">
+						<f:validateLength maximum="30" />
+		       		</p:inputText>
+		       		<p:message for="u-ulica" />		       		
+
+
+		       		<p:outputLabel for="u-nr_domu" value="Numer domu:"/>
+		       		<p:inputText id="u-nr_domu" value="#{RegistrationBB.uzytkownik.nr_domu}" 
+		       			required="true" requiredMessage="Nie podano numeru domu" 
+		       			converterMessage="wymagana liczba całkowita" 
+		       			validatorMessage="co najwyżej 30 znaków">
+						<f:validateLength maximum="30" />
+		       		</p:inputText>
+		       		<p:message for="u-nr_domu" />
+		       		
+		       		<p:messages id="msgs"/>
+		       		
+					<!--<p:commandButton value="Policz ratę" action="#{kredytBB.licz()}" update="@form" /> -->
+					<p:commandButton value="Zarejestruj" action="#{RegistrationBB.register()}" update="@form"/>
+				</h:panelGrid>
+				<p:commandButton value="Strona logowania" action="#{RegistrationBB.loginScreen()}"/>	
+			</h:form>
+				
+		</p:panel>
+	
+	</ui:define>
+	
+</ui:composition>
+</html>
