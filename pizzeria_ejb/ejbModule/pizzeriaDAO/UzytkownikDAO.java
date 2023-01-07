@@ -1,5 +1,6 @@
 package pizzeriaDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import pizzeria.entities.Rola;
 import pizzeria.entities.Uzytkownik;
 
 @Stateless
@@ -84,7 +86,75 @@ public class UzytkownikDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 		return list;
+	}
+	
+	public Uzytkownik getUserFromDB(String login, String haslo) {
+		
+		Uzytkownik u = null;
+		
+		Query query = em.createQuery("select u from Uzytkownik u where u.login like :login and u.haslo like :haslo");
+		
+		if (login != null) {
+			query.setParameter("login", login);
+			query.setParameter("haslo", haslo);
+		}
+		
+		try {
+			u = (Uzytkownik)query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		return u;
+	}
+	
+	public String getLoginFromDB(String login) {
+		
+		String log = null;
+		
+		Query query = em.createQuery("select login from Uzytkownik u where u.login like :login");
+		query.setParameter("login", login);
+		
+		try {
+			log = (String)query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return log;
+	}
+	
+	public List<String> getRolesFromDB(Uzytkownik uzytkownik) { // -> Role do ogarnięcia
+		
+		ArrayList<String> roles = new ArrayList<String>();
+		
+		if (uzytkownik.getLogin().equals("Admin") && uzytkownik.getHaslo().equals("Admin")) {
+			Query query1 = em.createQuery("select nazwa_roli from Rola r where r.nazwa_roli='Admin'");
+			roles.add((String)query1.getSingleResult());
+		} else if (uzytkownik.getLogin().equals("Mod") && uzytkownik.getHaslo().equals("Mod")) {
+			Query query2 = em.createQuery("select nazwa_roli from Rola r where r.nazwa_roli='Mod'");
+			roles.add((String)query2.getSingleResult());
+		} else {
+			Query query3 = em.createQuery("select nazwa_roli from Rola r where r.nazwa_roli='User'");
+			roles.add((String)query3.getSingleResult());
+		}
+		
+		return roles;
+	}
+	
+	public void insertUserRole(int ID_Uzytkownik) {
+		
+		Query query1 = em.createQuery("select ID_Rola from Rola r where r.ID_Rola='1'");
+		
+		int rola = (Integer)query1.getSingleResult();
+		
+		Query query = em.createNativeQuery("insert into uzytkownik_rola (ID_Rola, ID_Uzytkownik) values (?, ?)");
+		
+		query.setParameter(1, rola);
+		query.setParameter(2, ID_Uzytkownik);
+		query.executeUpdate();
 	}
 }

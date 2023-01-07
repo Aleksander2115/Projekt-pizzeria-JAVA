@@ -13,22 +13,29 @@
 	
 		<p:panel header="Logowanie">
 		
-			<p:messages id="msg"/>
 		
-			<h:form id="bla">
+			<h:form id="loginform">
+			<p:messages id="msgs"/>
 				<h:panelGrid id="grid" styleClass="ui-noborder" columns="3" celpadding="5">	
 		       		
-		       		<p:outputLabel for="login" value="Login:"/>
-		       		<p:inputText id="login" value="#{kredytBB.kwota}" required="true" requiredMessage="Nie podano loginu" converterMessage="conv mess" />
-		       		<p:message for="login" />
+		       		<p:outputLabel for="u-login" value="Login:"/>
+		       		<p:inputText id="u-login" value="#{loginBB.uzytkownik.login}" 
+		       			required="true" requiredMessage="Nie podano loginu" >
+		       		</p:inputText>
+		       		<p:message for="u-login" />
 				
-		       		<p:outputLabel for="haslo" value="Hasło:"/>
-		       		<p:inputText id="haslo" value="#{kredytBB.oprocentowanie}" required="true" requiredMessage="Nie podano hasla" converterMessage="conv mess" />
-		       		<p:message for="haslo" />   		
+		       		<p:outputLabel for="u-haslo" value="Hasło:"/>
+		       		<p:inputText id="u-haslo" type="password" value="#{loginBB.uzytkownik.haslo}" 
+		       			required="true" requiredMessage="Nie podano hasla" >
+		       		</p:inputText>
+		       		<p:message for="u-haslo" />   		
 		       	
-					<!--<p:commandButton value="Policz ratę" action="#{kredytBB.licz()}" update="@form" /> -->
-					<p:commandButton value="Zaloguj" action="#{kredytBB.licz_AJAX()}" update="msg"/>
+					<p:commandButton value="Zaloguj" action="#{loginBB.login()}" update="@form"/>
 				</h:panelGrid>
+			</h:form>
+		
+			<h:form>	
+				<p:commandButton id="strona_rejestracji" value="Strona rejestracji" action="#{loginBB.registrationScreen()}"/>		
 			</h:form>
 		
 		</p:panel>

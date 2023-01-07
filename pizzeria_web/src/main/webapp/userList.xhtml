@@ -17,7 +17,7 @@
 		
 				<h:form id="form-table" style="margin-bottom:1em;">
 			
-					<p:dataTable value="#{userListBB.getFullList}" var="u">
+					<p:dataTable value="#{userListBB.list}" var="u">
 
 						<p:column>
 							<f:facet name="header">
@@ -87,10 +87,14 @@
 								<h:outputText value="Numer domu" />
 							</f:facet>
 							<h:outputText value="#{u.nr_domu}" />
-						</p:column>			
+						</p:column>		
 			
 					</p:dataTable>
 				</h:form>
+		
+		<h:form>
+			<p:commandButton id="strona_logowania" value="Strona logowania" action="#{registrationBB.loginScreen()}"/>
+		</h:form>
 		
 		</p:panel>
 	

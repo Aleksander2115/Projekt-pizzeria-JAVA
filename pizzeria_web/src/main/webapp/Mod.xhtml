@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<ui:composition template="/templates/page-template.xhtml">
+	
+	<ui:define name="pageContent">
+	
+		<p:panel header="Lista zamówień">
+		
+				<h:form id="form-table" style="margin-bottom:1em;">
+				<p:messages id="msg"/>
+			
+					<p:dataTable value="#{modBB.wholeOrderList()}" var="z">
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="ID zamówienia" />
+							</f:facet>
+							<h:outputText value="#{z.ID_Zamowienie}" />
+						</p:column>
+		
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Data zamówienia" />
+							</f:facet>
+							<h:outputText value="#{z.data_zamowienia}" />
+						</p:column>									
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Cena dostawy" />
+							</f:facet>
+							<h:outputText value="#{z.cena_dostawy}" />
+						</p:column>					
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Koszt całkowity" />
+							</f:facet>
+							<h:outputText value="#{z.koszt_calkowity}" />
+						</p:column>
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Status" />
+							</f:facet>
+							<h:outputText value="#{z.status}" />
+						</p:column>						
+			
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Opcje" />
+							</f:facet>
+							<p:commandButton id="Usuń" value="Usuń" action="#{modBB.deleteOrder(z)}" update="@form"/>
+						</p:column>					
+			
+					</p:dataTable>
+				</h:form>
+		
+		<h:form>
+			<p:commandButton id="logout" value="Wyloguj" action="#{loginBB.logout()}"/>
+		</h:form>
+		
+		</p:panel>
+	
+	</ui:define>
+</ui:composition>
+</html>

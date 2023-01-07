@@ -13,11 +13,12 @@
 	
 		<p:panel header="Rejestracja">
 		
-			<h:form id="bla">
+			<h:form id="regForm">
+				<p:messages id="msgs"/> 			
 				<h:panelGrid id="grid" styleClass="ui-noborder" columns="3" celpadding="5">	
 		       		
 		       		<p:outputLabel for="u-login" value="Login:"/>
-		       		<p:inputText id="u-login" value="#{RegistrationBB.uzytkownik.login}" 
+		       		<p:inputText id="u-login" value="#{registrationBB.uzytkownik.login}" label="Login"
 		       			required="true" requiredMessage="Nie podano loginu" 
 		       			validatorMessage="co najwyżej 30 znaków">
 						<f:validateLength maximum="30" />
@@ -25,15 +26,23 @@
 		       		<p:message for="u-login" />
 				
 		       		<p:outputLabel for="u-haslo" value="Hasło:"/>
-		       		<p:inputText id="u-haslo" value="#{RegistrationBB.uzytkownik.haslo}" 
+		       		<p:inputText id="u-haslo" type="password" value="#{registrationBB.uzytkownik.haslo}" label="Haslo"
 		       			required="true" requiredMessage="Nie podano hasla" 
 		       			validatorMessage="co najwyżej 30 znaków">
 						<f:validateLength maximum="30" />
 					</p:inputText>
-		       		<p:message for="u-haslo" />		
+		       		<p:message for="u-haslo" />
+		       		
+		       		<p:outputLabel for="haslo2" value="Powtórz hasło:"/>
+		       		<p:inputText id="haslo2" type="password" value="#{registrationBB.haslo2}" label="Haslo2"
+		       			required="true" requiredMessage="Nie podano hasla" 
+		       			validatorMessage="co najwyżej 30 znaków">
+						<f:validateLength maximum="30" />
+					</p:inputText>
+		       		<p:message for="haslo2" />
 		       	
 		       		<p:outputLabel for="u-imie" value="Imię:"/>
-		       		<p:inputText id="u-imie" value="#{RegistrationBB.uzytkownik.imie}" 
+		       		<p:inputText id="u-imie" value="#{registrationBB.uzytkownik.imie}" label="Imie"
 		       		required="true" requiredMessage="Nie podano imienia" 
 		       			validatorMessage="co najwyżej 30 znaków">
 						<f:validateLength maximum="30" />
@@ -41,7 +50,7 @@
 		       		<p:message for="u-imie" />
 		       		
 		       		<p:outputLabel for="u-nazwisko" value="Nazwisko:"/>
-		       		<p:inputText id="u-nazwisko" value="#{RegistrationBB.uzytkownik.nazwisko}" 
+		       		<p:inputText id="u-nazwisko" value="#{registrationBB.uzytkownik.nazwisko}" label="Nazwisko"
 		       			required="true" requiredMessage="Nie podano nazwiska" 
 		       			validatorMessage="co najwyżej 30 znaków">
 						<f:validateLength maximum="30" />
@@ -49,16 +58,16 @@
 		       		<p:message for="u-nazwisko" />	
 		       	
 		       		<p:outputLabel for="u-nr_telefonu" value="Numer telefonu:"/>
-		       		<p:inputText id="u-nr_telefonu" value="#{RegistrationBB.uzytkownik.nr_telefonu}" 
+		       		<p:inputText id="u-nr_telefonu" value="#{registrationBB.uzytkownik.nr_telefonu}" label="Nr_telefonu"
 		       			required="true" requiredMessage="Nie podano numeru telefonu" 
 		       			converterMessage="wymagana liczba całkowita" 
-		       			validatorMessage="co najwyzej 9 cyfr">
-		       			<f:validateDoubleRange maximum="9.0" />
+		       			validatorMessage="co najmniej 7 cyfr">
+		       			<f:validateLongRange minimum="7"/>
 		       			</p:inputText>
 		       		<p:message for="u-nr_telefonu" />	
 		       		
 		       		<p:outputLabel for="u-miejscowosc" value="Miejscowość:"/>
-		       		<p:inputText id="u-miejscowosc" value="#{RegistrationBB.uzytkownik.miejscowosc}" 
+		       		<p:inputText id="u-miejscowosc" value="#{registrationBB.uzytkownik.miejscowosc}" label="Miejscowosc"
 		       			required="true" requiredMessage="Nie podano miejscowości" 
 		       			validatorMessage="co najwyżej 40 znaków">
 						<f:validateLength maximum="40" />
@@ -66,16 +75,16 @@
 		       		<p:message for="u-miejscowosc" />	
 
 		       		<p:outputLabel for="u-kod_pocztowy" value="Kod pocztowy:"/>
-		       		<p:inputText id="u-kod_pocztowy" value="#{RegistrationBB.uzytkownik.kod_pocztowy}" 
+		       		<p:inputText id="u-kod_pocztowy" value="#{registrationBB.uzytkownik.kod_pocztowy}" label="Kod_pocztowy"
 		       			required="true" requiredMessage="Nie podano kodu pocztowego" 
 		       			converterMessage="wymagana liczba całkowita" 
-		       			validatorMessage="co najwyzej 5 cyfr">
-		       			<f:validateDoubleRange maximum="5.0" />
+		       			validatorMessage="co najmniej 5 cyfr">
+		       			<f:validateLongRange minimum="5"/>
 		       		</p:inputText>
 		       		<p:message for="u-kod_pocztowy" />
 		       		
 		       		<p:outputLabel for="u-ulica" value="Ulica:"/>
-		       		<p:inputText id="u-ulica" value="#{RegistrationBB.uzytkownik.ulica}" 
+		       		<p:inputText id="u-ulica" value="#{registrationBB.uzytkownik.ulica}" label="Ulica"
 		       			required="true" requiredMessage="Nie podano ulicy" 
 		       			validatorMessage="co najwyżej 30 znaków">
 						<f:validateLength maximum="30" />
@@ -84,22 +93,27 @@
 
 
 		       		<p:outputLabel for="u-nr_domu" value="Numer domu:"/>
-		       		<p:inputText id="u-nr_domu" value="#{RegistrationBB.uzytkownik.nr_domu}" 
+		       		<p:inputText id="u-nr_domu" value="#{registrationBB.uzytkownik.nr_domu}" label="Nr_domu"
 		       			required="true" requiredMessage="Nie podano numeru domu" 
 		       			converterMessage="wymagana liczba całkowita" 
 		       			validatorMessage="co najwyżej 30 znaków">
 						<f:validateLength maximum="30" />
 		       		</p:inputText>
 		       		<p:message for="u-nr_domu" />
+		       			
+					<p:commandButton value="Zarejestruj" action="#{registrationBB.register()}" update="@form"/>
 		       		
-		       		<p:messages id="msgs"/>
-		       		
-					<!--<p:commandButton value="Policz ratę" action="#{kredytBB.licz()}" update="@form" /> -->
-					<p:commandButton value="Zarejestruj" action="#{RegistrationBB.register()}" update="@form"/>
 				</h:panelGrid>
-				<p:commandButton value="Strona logowania" action="#{RegistrationBB.loginScreen()}"/>	
 			</h:form>
-				
+			
+			<h:form>	
+				<p:commandButton id="strona_logowania" value="Strona logowania" action="#{registrationBB.loginScreen()}"/>		
+			</h:form>	
+			
+			<h:form>	
+				<p:commandButton id="strona_userList" value="User list" action="#{registrationBB.testUserList()}"/>		
+			</h:form>
+		
 		</p:panel>
 	
 	</ui:define>
