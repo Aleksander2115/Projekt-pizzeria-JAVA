@@ -79,16 +79,16 @@ public class ZamowienieDAO {
 		query.executeUpdate();
 	}
 	
-	public List<Pizza> getOrderedPizza(int ID_Zamowienie) {
-		
-		List<Pizza> list = null;
-		
-		Query query = em.createQuery("select p from Pizza p where ");
-		
-		list = query.getResultList();
-		
-		return list;
-	}
+//	public List<Pizza> getOrderedPizza(int ID_Zamowienie) {
+//		
+//		List<Pizza> list = null;
+//		
+//		Query query = em.createQuery("select p from Pizza p where ");
+//		
+//		list = query.getResultList();
+//		
+//		return list;
+//	}
 	
 	public Zamowienie getOrder(int ID_Uzytkownik) {
 		
@@ -114,20 +114,30 @@ public class ZamowienieDAO {
 		query.executeUpdate();
 	}
 	
-	public void deleteOrder(int ID_Zamowienie) {
+	public void changeOrderStatus(int ID_Zamowienie, int numerStatusu) {
+		
+		Query query = em.createQuery("update Zamowienie set Status = :Status where ID_Zamowienie = :ID_Zamowienie");
+		
+		query.setParameter("ID_Zamowienie", ID_Zamowienie);
+		query.setParameter("Status", numerStatusu);
+		query.executeUpdate();
+	}
+	
+	public void deleteOrder(int ID_Zamowienie, int Status) {
 		
 		Query query1 = em.createNativeQuery("delete from zamowienie_pizza where ID_Zamowienie = :ID_Zamowienie");
 		query1.setParameter("ID_Zamowienie", ID_Zamowienie);
-		
+			
 		query1.executeUpdate();
-		
+			
 		Query query2 = em.createNativeQuery("delete from zamowienie_dodatek where ID_Zamowienie = :ID_Zamowienie");
 		query2.setParameter("ID_Zamowienie", ID_Zamowienie);
-
+	
 		query2.executeUpdate();
-		
-		Query query = em.createNativeQuery("delete from Zamowienie where ID_Zamowienie = :ID_Zamowienie and status='0'");
+			
+		Query query = em.createNativeQuery("delete from Zamowienie where ID_Zamowienie = :ID_Zamowienie and status = :Status");
 		query.setParameter("ID_Zamowienie", ID_Zamowienie);
+		query.setParameter("Status", Status);
 		
 		query.executeUpdate();
 	}

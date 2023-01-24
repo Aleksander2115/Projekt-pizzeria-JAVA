@@ -11,31 +11,31 @@
 	
 	<ui:define name="pageContent">
 	
-		<p:panel header="Logowanie">
+		<p:panel header="#{txtLog.loginFormHeader}">
 		
 		
 			<h:form id="loginform">
 			<p:messages id="msgs"/>
 				<h:panelGrid id="grid" styleClass="ui-noborder" columns="3" celpadding="5">	
 		       		
-		       		<p:outputLabel for="u-login" value="Login:"/>
+		       		<p:outputLabel for="u-login" value="#{txtLog.login}"/>
 		       		<p:inputText id="u-login" value="#{loginBB.uzytkownik.login}" 
-		       			required="true" requiredMessage="Nie podano loginu" >
+		       			required="true" requiredMessage="#{txtLogErr.loginParamRequired}" >
 		       		</p:inputText>
 		       		<p:message for="u-login" />
 				
-		       		<p:outputLabel for="u-haslo" value="Hasło:"/>
+		       		<p:outputLabel for="u-haslo" value="#{txtLog.password}"/>
 		       		<p:inputText id="u-haslo" type="password" value="#{loginBB.uzytkownik.haslo}" 
-		       			required="true" requiredMessage="Nie podano hasla" >
+		       			required="true" requiredMessage="#{txtLogErr.loginParamRequired}" >
 		       		</p:inputText>
 		       		<p:message for="u-haslo" />   		
 		       	
-					<p:commandButton value="Zaloguj" action="#{loginBB.login()}" update="@form"/>
+					<p:commandButton value="#{txtLog.loginButton}" action="#{loginBB.login()}" update="@form"/>
 				</h:panelGrid>
 			</h:form>
 		
 			<h:form>	
-				<p:commandButton id="strona_rejestracji" value="Strona rejestracji" action="#{loginBB.registrationScreen()}"/>		
+				<p:commandButton id="strona_rejestracji" value="#{txtLog.registrationPageButton}" action="#{loginBB.registrationScreen()}"/>		
 			</h:form>
 		
 		</p:panel>

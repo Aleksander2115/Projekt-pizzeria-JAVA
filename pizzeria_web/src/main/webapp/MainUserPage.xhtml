@@ -10,34 +10,34 @@
 <ui:composition template="/templates/page-template.xhtml">
 	
 	<ui:define name="pageContent">
-		<p:panel header="Twoje zamówienia">
+		<p:panel header="#{txtMUP.yourOrders}">
 		
 			<p:dataTable value="#{orderBB.getOrderList()}" var="z" rendered="#{orderBB.getOrderList() != null}">
 				
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Numer zamówienia" />
+						<h:outputText value="#{txtMUP.orderNumber}" />
 					</f:facet>
 					<h:outputText value="#{z.ID_Zamowienie}" />
 				</p:column>			
 				
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Data zamówienia" />
+						<h:outputText value="#{txtMUP.orderDate}" />
 					</f:facet>
 					<h:outputText value="#{z.data_zamowienia}" />
 				</p:column>	
 				
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Cena_dostawy" />
+						<h:outputText value="#{txtMUP.orderDrivePrice}" />
 					</f:facet>
 					<h:outputText value="#{z.cena_dostawy}" />
 				</p:column>	
 				
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Koszt całkowity" />
+						<h:outputText value="#{txtMUP.orderFullPrice}" />
 					</f:facet>
 					<h:outputText value="#{z.koszt_calkowity}" />
 				</p:column>					
@@ -46,72 +46,41 @@
 		</p:panel>
 		
 		
-		<p:panel header="Aktualne zamówienie - pizza">
 		
-			<p:dataTable value="#{orderBB.orderPizzaLive()}" var="p" rendered="#{orderBB.orderPizzaLive() != null}">
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="Numer" />
-					</f:facet>
-				<h:outputText value="#{p.ID_Pizza}" />
-				</p:column>	
-				
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="Nazwa" />
-					</f:facet>
-					<h:outputText value="#{p.nazwa}" />
-				</p:column>
-					
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="Cena" />
-					</f:facet>
-				<h:outputText value="#{p.cena}" />
-				</p:column>
-				
-				<p:column>
-					<f:facet name="header">
-						<h:outputText value="Opcje" />
-					</f:facet>
-					<p:commandButton id="Usuń" value="Usuń" action="#{orderBB.deletePizzaLive(p)}" update="@form"/>
-				</p:column>
-			</p:dataTable>
-		
-		</p:panel>
+			
 
-		<p:panel header="Menu">
+		<p:panel header="#{txtMUP.menu}">
 		
 			<h:form id="form-table1" style="margin-bottom:1em;">
 			<p:messages id="msgs"/>
-				<p:panel header="Pizze">
+				<p:panel header="#{txtMUP.pizzas}">
 					<p:dataTable value="#{mainUserPageBB.getPizzaList()}" var="p">
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Numer" />
+									<h:outputText value="#{txtMUP.number}" />
 								</f:facet>
 								<h:outputText value="#{p.ID_Pizza}" />
 							</p:column>	
 							
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Nazwa" />
+									<h:outputText value="#{txtMUP.name}" />
 								</f:facet>
 								<h:outputText value="#{p.nazwa}" />
 							</p:column>
 							
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Cena" />
+									<h:outputText value="#{txtMUP.price}" />
 								</f:facet>
 								<h:outputText value="#{p.cena}" />
 							</p:column>
 							
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Opcje" />
+									<h:outputText value="#{txtMUP.options}" />
 								</f:facet>
-								<p:commandButton id="Dodaj" value="Dodaj" action="#{orderBB.orderPizza(p)}" update="@form"/>
+								<p:commandButton id="Dodaj" value="#{txtMUP.addButton}" action="#{orderBB.orderPizza(p)}" update="@form"/>
 							</p:column>								
 					</p:dataTable>
 				</p:panel>
@@ -119,35 +88,35 @@
 				
 				<h:form id="form-table2" style="margin-bottom:1em;">
 				<p:messages id="msgs"/>
-				<p:panel header="Dodatki">
+				<p:panel header="#{txtMUP.additions}">
 					<p:dataTable value="#{mainUserPageBB.getDodatekList()}" var="d">
 						
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Numer" />
+								<h:outputText value="#{txtMUP.number}" />
 							</f:facet>
 							<h:outputText value="#{d.ID_Dodatek}" />
 						</p:column>	
 						
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Nazwa" />
+								<h:outputText value="#{txtMUP.name}" />
 							</f:facet>
 							<h:outputText value="#{d.nazwa}" />
 						</p:column>
 						
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Rodzaj" />
+								<h:outputText value="#{txtMUP.type}" />
 							</f:facet>
 							<h:outputText value="#{d.rodzaj}" />
 						</p:column>
 						
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Opcje" />
+								<h:outputText value="#{txtMUP.options}" />
 							</f:facet>
-							<p:commandButton id="Dodaj" value="Dodaj" action="#{orderBB.orderAddition(d)}" update="@form"/>
+							<p:commandButton id="Dodaj" value="#{txtMUP.addButton}" action="#{orderBB.orderAddition(d)}" update="@form"/>
 						</p:column>								
 						
 					</p:dataTable>
@@ -155,7 +124,7 @@
 				</h:form>
 		
 		<h:form>
-			<p:commandButton id="Wyloguj" value="Wyloguj" action="#{loginBB.logout()}"/>
+			<p:commandButton id="Wyloguj" value="#{txtMUP.logoutButton}" action="#{loginBB.logout()}"/>
 		</h:form>
 		
 		</p:panel>

@@ -157,4 +157,57 @@ public class UzytkownikDAO {
 		query.setParameter(2, ID_Uzytkownik);
 		query.executeUpdate();
 	}
+	
+	public List<Uzytkownik> getUserWithRoles() {
+		
+		List<Uzytkownik> list = null;
+		
+		Query query = em.createQuery("select u from Uzytkownik u");
+		
+		list = query.getResultList();
+		
+		return list;
+	}
+	
+	public void changeToMod(int ID_Uzytkownik) {
+		
+		Query query = em.createNativeQuery("update uzytkownik_rola u set ID_Rola = 2 where ID_Uzytkownik = :ID_Uzytkownik");
+		query.setParameter("ID_Uzytkownik", ID_Uzytkownik);
+		
+		query.executeUpdate();
+	}
+	
+	public void changeToAdmin(int ID_Uzytkownik) {
+		
+		Query query = em.createNativeQuery("update uzytkownik_rola u set ID_Rola = 3 where ID_Uzytkownik = :ID_Uzytkownik");
+		query.setParameter("ID_Uzytkownik", ID_Uzytkownik);
+		
+		query.executeUpdate();
+	}
+	
+	public void changeToUser(int ID_Uzytkownik) {
+		
+		Query query = em.createNativeQuery("update uzytkownik_rola u set ID_Rola = 1 where ID_Uzytkownik = :ID_Uzytkownik");
+		query.setParameter("ID_Uzytkownik", ID_Uzytkownik);
+		
+		query.executeUpdate();
+	}
+	
+	public List<Uzytkownik> getListLazy(int start, int size) {
+        
+		List<Uzytkownik> list = null;
+
+        Query query = em.createQuery("select u from Uzytkownik u");
+
+        query.setFirstResult(start);
+        query.setMaxResults(size);
+
+        try {
+            list = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 }

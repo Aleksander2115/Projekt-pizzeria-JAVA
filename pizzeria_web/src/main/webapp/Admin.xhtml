@@ -16,7 +16,11 @@
 				<h:form id="form-table" style="margin-bottom:1em;">
 				<p:messages id="msg"/>
 			
-					<p:dataTable value="#{AdminBB.list}" var="u">
+					<p:dataTable value="#{adminBB.lazyModel}" var="u" lazy="true" paginator="true" rows="5"
+            		rowsPerPageTemplate="3,4,5"
+            		paginatorPosition="bottom"
+            		paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+            		paginatorAlwaysVisible="false">>
 
 						<p:column>
 							<f:facet name="header">
@@ -24,19 +28,35 @@
 							</f:facet>
 							<h:outputText value="#{u.ID_Uzytkownik}" />
 						</p:column>
-						
+
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Login" />
+								<h:outputText value="Login użytkownika" />
 							</f:facet>
 							<h:outputText value="#{u.login}" />
-						</p:column>								
-			
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="ID roli" />
+							</f:facet>
+							
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Zmień rolę na" />
+							</f:facet>
+							<p:commandButton id="changeToMod" value="Mod" action="#{adminBB.changeToMod(u)}" process="@this"/>
+							<p:commandButton id="changeToAdmin" value="Admin" action="#{adminBB.changeToAdmin(u)}" process="@this"/>
+							<p:commandButton id="changeToUser" value="User" action="#{adminBB.changeToUser(u)}" process="@this"/>
+						</p:column>	
+
 					</p:dataTable>
 				</h:form>
 		
 		<h:form>
-			<p:commandButton id="strona_logowania" value="Strona logowania" action="#{registrationBB.loginScreen()}"/>
+			<p:commandButton id="logout" value="Wyloguj" action="#{loginBB.logout()}"/>
 		</h:form>
 		
 		</p:panel>

@@ -9,8 +9,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.ejb.EJB;
+import javax.faces.annotation.ManagedProperty;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
@@ -34,6 +36,14 @@ public class RegistrationBB implements Serializable {
 
 	@Inject
 	FacesContext context;
+	
+	@Inject
+	@ManagedProperty("#{txtRegErr}")
+	private ResourceBundle txtRegErr;
+	
+	@Inject
+	@ManagedProperty("#{txtReg}")
+	private ResourceBundle txtReg;
 
 	public String getHaslo2() {
 		return haslo2;
@@ -51,15 +61,15 @@ public class RegistrationBB implements Serializable {
 
 		if (!uzytkownik.getHaslo().equals(haslo2)) {
 			context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Hasła nie są takie same", null));
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, txtRegErr.getString("registerPassNotSame"), null));
 			return null;
-		} else if (uzytkownik.getLogin().equals("admin") && uzytkownik.getHaslo().equals("admin") || uzytkownik.getLogin().equals("mod") && uzytkownik.getHaslo().equals("mod")) {
+		} else if (uzytkownik.getLogin().equals("Admin") && uzytkownik.getHaslo().equals("Admin") || uzytkownik.getLogin().equals("Mod") && uzytkownik.getHaslo().equals("Mod")) {
 			context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nie możesz użyć tego loginu i hasła", null));
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, txtRegErr.getString("registerWrongPass"), null));
 			return null;
 		} else if (uzytkownik.getLogin().equals(uzytkownikDAO.getLoginFromDB(uzytkownik.getLogin()))) {
 			context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Taki login już istnieje", null));
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, txtRegErr.getString("registerUserExists"), null));
 			return null;
 		}
 		
@@ -68,7 +78,7 @@ public class RegistrationBB implements Serializable {
 					uzytkownikDAO.create(uzytkownik);
 			} else {
 				context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Taki użytkownik już istnieje", null));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, txtRegErr.getString("registerUserExists"), null));
 				return null;
 			}
 			
@@ -77,7 +87,7 @@ public class RegistrationBB implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "wystąpił błąd podczas zapisu", null));
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, txtRegErr.getString("registerSaveProblem"), null));
 			return null;
 		}
 		

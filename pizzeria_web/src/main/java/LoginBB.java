@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.ejb.EJB;
+import javax.faces.annotation.ManagedProperty;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -69,6 +71,14 @@ public class LoginBB implements Serializable{
 	
 	@Inject
 	ExternalContext extctx;
+	
+	@Inject
+	@ManagedProperty("#{txtLogErr}")
+	private ResourceBundle txtLogErr;
+	
+	@Inject
+	@ManagedProperty("#{txtLog}")
+	private ResourceBundle txtLog;
 
 	public Uzytkownik getUzytkownik() {
 		return uzytkownik;
@@ -81,37 +91,21 @@ public class LoginBB implements Serializable{
 	public String login() {	
 		
 		context.getCurrentInstance();
+		
 		RemoteClient<Uzytkownik> client = new RemoteClient<Uzytkownik>();
 		HttpSession sessionZam = (HttpSession) extctx.getSession(true);
 		
-		if (!uzytkownik.getLogin().equals("Mod"))
+		if (!uzytkownik.getLogin().equals("Admin") && !uzytkownik.getLogin().equals("Mod"))
 			uzytkownik = uzytkownikDAO.getUserFromDB(uzytkownik.getLogin(), uzytkownik.getHaslo());
 		
 		if (uzytkownik == null) {
 			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Użytkownik nie istnieje, zarejestruj się", null));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, txtLogErr.getString("loginUserExists"), null));
 			logout();
 			return null;
-		} else if (uzytkownik.getLogin().equals("Admin") && uzytkownik.getHaslo().equals("Admin")) {
-			
-			uzytkownik.setID_Uzytkownik(-1);
-			uzytkownik.setImie("Admin");
-			uzytkownik.setNazwisko("Admin");
-			uzytkownik.setNr_telefonu(111111111);
-			uzytkownik.setMiejscowosc("Admin");
-			uzytkownik.setKod_pocztowy(11111);
-			uzytkownik.setUlica("Admin");
-			uzytkownik.setNr_domu("Admin");
-			
-			client.getRoles().add("Admin");
-			
-			HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-			client.store(request);
-			
-			sessionZam.setAttribute("ID_Uzytkownik", uzytkownik.getID_Uzytkownik());
-			
-			return "Admin?faces-redirect=true";
-		} else if (uzytkownik.getLogin().equals("Mod") && uzytkownik.getHaslo().equals("Mod")) {
+		}  
+		
+		if (uzytkownik.getLogin().equals("Mod") && uzytkownik.getHaslo().equals("Mod")) {
 			
 			uzytkownik.setID_Uzytkownik(-1);
 			uzytkownik.setImie("Mod");
@@ -131,6 +125,28 @@ public class LoginBB implements Serializable{
 			
 			return "Mod?faces-redirect=true";
 		}
+		
+		if (uzytkownik.getLogin().equals("Admin") && uzytkownik.getHaslo().equals("Admin")) {
+			
+			uzytkownik.setID_Uzytkownik(-1);
+			uzytkownik.setImie("Admin");
+			uzytkownik.setNazwisko("Admin");
+			uzytkownik.setNr_telefonu(222222222);
+			uzytkownik.setMiejscowosc("Admin");
+			uzytkownik.setKod_pocztowy(22222);
+			uzytkownik.setUlica("Admin");
+			uzytkownik.setNr_domu("Admin");
+			
+			client.getRoles().add("Admin");
+			
+			HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+			client.store(request);
+			
+			sessionZam.setAttribute("ID_Uzytkownik", uzytkownik.getID_Uzytkownik());
+			
+			return "Admin?faces-redirect=true";
+		}
+		
 		
 			client.setDetails(uzytkownik);
 		
@@ -172,7 +188,10 @@ public class LoginBB implements Serializable{
 			
 			ID_Zamowienie = (Integer) sessionZam.getAttribute("ID_Zamowienie");
 			
-			zamowienieDAO.deleteOrder(ID_Zamowienie);
+			zamowienie = zamowienieDAO.getOrder(ID_Uzytkownik);
+			
+			if (zamowienie.getStatus() == 0)
+				zamowienieDAO.deleteOrder(ID_Zamowienie, 0);
 		}
 		
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -22,7 +23,6 @@ import javax.faces.context.Flash;
 import javax.faces.simplesecurity.RemoteClient;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -45,6 +45,6 @@ public class ModBB implements Serializable{
 	
 	public void deleteOrder(Zamowienie zamowienie) {
 		
-		zamowienieDAO.deleteOrder(zamowienie.getID_Zamowienie());
+		zamowienieDAO.deleteOrder(zamowienie.getID_Zamowienie(), zamowienie.getStatus());
 	}
 }

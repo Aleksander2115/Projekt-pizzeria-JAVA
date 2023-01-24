@@ -13,8 +13,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.ejb.EJB;
+import javax.faces.annotation.ManagedProperty;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -47,6 +49,10 @@ public class OrderBB implements Serializable{
 	
 	@Inject
 	ExternalContext extctx;
+	
+	@Inject
+	@ManagedProperty("#{txtMUPErr}")
+	private ResourceBundle txtMUPErr;
 
 	public Uzytkownik getUzytkownik() {
 		return uzytkownik;
@@ -66,16 +72,16 @@ public class OrderBB implements Serializable{
 	}
 	
 	
-	public List<Pizza> orderPizzaLive(){
-		List<Pizza> list = null;
-		
-		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
-		ID_Zamowienie = (Integer) sessionZam.getAttribute("ID_Zamowienie");
-		
-		list = zamowienieDAO.getOrderedPizza(ID_Zamowienie);
-		
-		return list;
-	}
+//	public List<Pizza> orderPizzaLive(){
+//		List<Pizza> list = null;
+//		
+//		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
+//		ID_Zamowienie = (Integer) sessionZam.getAttribute("ID_Zamowienie");
+//		
+//		list = zamowienieDAO.getOrderedPizza(ID_Zamowienie);
+//		
+//		return list;
+//	}
 	
 	
 	public void orderPizza(Pizza pizza) {
@@ -85,8 +91,10 @@ public class OrderBB implements Serializable{
 		
 		zamowienieDAO.insertPizzaOrder(pizza.getID_Pizza(), ID_Zamowienie);
 		
+		zamowienieDAO.changeOrderStatus(ID_Zamowienie, 1);
+		
 		context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Dodano pizze do zamówienia", null));
+				new FacesMessage(FacesMessage.SEVERITY_INFO, txtMUPErr.getString("addToOrderPizza"), null));
 	}
 	
 	
@@ -98,7 +106,7 @@ public class OrderBB implements Serializable{
 		zamowienieDAO.insertAdditionOrder(dodatek.getID_Dodatek(), ID_Zamowienie);
 		
 		context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Dodano dodatek do zamówienia", null));
+				new FacesMessage(FacesMessage.SEVERITY_INFO, txtMUPErr.getString("addToOrderAddition"), null));
 	}
 	
 	

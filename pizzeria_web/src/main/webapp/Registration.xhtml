@@ -17,97 +17,97 @@
 				<p:messages id="msgs"/> 			
 				<h:panelGrid id="grid" styleClass="ui-noborder" columns="3" celpadding="5">	
 		       		
-		       		<p:outputLabel for="u-login" value="Login:"/>
+		       		<p:outputLabel for="u-login" value="#{txtReg.login}"/>
 		       		<p:inputText id="u-login" value="#{registrationBB.uzytkownik.login}" label="Login"
-		       			required="true" requiredMessage="Nie podano loginu" 
-		       			validatorMessage="co najwyżej 30 znaków">
+		       			required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			validatorMessage="#{txtRegErr.registerValidationLengthTxt}">
 						<f:validateLength maximum="30" />
 					</p:inputText>
 		       		<p:message for="u-login" />
 				
-		       		<p:outputLabel for="u-haslo" value="Hasło:"/>
+		       		<p:outputLabel for="u-haslo" value="#{txtReg.password}"/>
 		       		<p:inputText id="u-haslo" type="password" value="#{registrationBB.uzytkownik.haslo}" label="Haslo"
-		       			required="true" requiredMessage="Nie podano hasla" 
-		       			validatorMessage="co najwyżej 30 znaków">
+		       			required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			validatorMessage="#{txtRegErr.registerValidationLengthTxt}">
 						<f:validateLength maximum="30" />
 					</p:inputText>
 		       		<p:message for="u-haslo" />
 		       		
-		       		<p:outputLabel for="haslo2" value="Powtórz hasło:"/>
+		       		<p:outputLabel for="haslo2" value="#{txtReg.password2}"/>
 		       		<p:inputText id="haslo2" type="password" value="#{registrationBB.haslo2}" label="Haslo2"
-		       			required="true" requiredMessage="Nie podano hasla" 
-		       			validatorMessage="co najwyżej 30 znaków">
+		       			required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			validatorMessage="#{txtRegErr.registerValidationLengthTxt}">
 						<f:validateLength maximum="30" />
 					</p:inputText>
 		       		<p:message for="haslo2" />
 		       	
-		       		<p:outputLabel for="u-imie" value="Imię:"/>
+		       		<p:outputLabel for="u-imie" value="#{txtReg.name}"/>
 		       		<p:inputText id="u-imie" value="#{registrationBB.uzytkownik.imie}" label="Imie"
-		       		required="true" requiredMessage="Nie podano imienia" 
-		       			validatorMessage="co najwyżej 30 znaków">
+		       		required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			validatorMessage="#{txtRegErr.registerValidationLengthTxt}">
 						<f:validateLength maximum="30" />
 						</p:inputText>
 		       		<p:message for="u-imie" />
 		       		
-		       		<p:outputLabel for="u-nazwisko" value="Nazwisko:"/>
+		       		<p:outputLabel for="u-nazwisko" value="#{txtReg.surname}"/>
 		       		<p:inputText id="u-nazwisko" value="#{registrationBB.uzytkownik.nazwisko}" label="Nazwisko"
-		       			required="true" requiredMessage="Nie podano nazwiska" 
-		       			validatorMessage="co najwyżej 30 znaków">
+		       			required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			validatorMessage="#{txtRegErr.registerValidationLengthTxt}">
 						<f:validateLength maximum="30" />
 					</p:inputText>
 		       		<p:message for="u-nazwisko" />	
 		       	
-		       		<p:outputLabel for="u-nr_telefonu" value="Numer telefonu:"/>
+		       		<p:outputLabel for="u-nr_telefonu" value="#{txtReg.tel_number}"/>
 		       		<p:inputText id="u-nr_telefonu" value="#{registrationBB.uzytkownik.nr_telefonu}" label="Nr_telefonu"
-		       			required="true" requiredMessage="Nie podano numeru telefonu" 
-		       			converterMessage="wymagana liczba całkowita" 
-		       			validatorMessage="co najmniej 7 cyfr">
+		       			required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			converterMessage="#{txtRegErr.registerParamIncorrect}" 
+		       			validatorMessage="#{txtRegErr.registerValidationNum7}">
 		       			<f:validateLongRange minimum="7"/>
 		       			</p:inputText>
 		       		<p:message for="u-nr_telefonu" />	
 		       		
-		       		<p:outputLabel for="u-miejscowosc" value="Miejscowość:"/>
+		       		<p:outputLabel for="u-miejscowosc" value="#{txtReg.city}"/>
 		       		<p:inputText id="u-miejscowosc" value="#{registrationBB.uzytkownik.miejscowosc}" label="Miejscowosc"
-		       			required="true" requiredMessage="Nie podano miejscowości" 
-		       			validatorMessage="co najwyżej 40 znaków">
-						<f:validateLength maximum="40" />
+		       			required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			validatorMessage="#{txtRegErr.registerValidationLengthTxt}">
+						<f:validateLength maximum="30" />
 		       		</p:inputText>
 		       		<p:message for="u-miejscowosc" />	
 
-		       		<p:outputLabel for="u-kod_pocztowy" value="Kod pocztowy:"/>
+		       		<p:outputLabel for="u-kod_pocztowy" value="#{txtReg.zip_code}"/>
 		       		<p:inputText id="u-kod_pocztowy" value="#{registrationBB.uzytkownik.kod_pocztowy}" label="Kod_pocztowy"
-		       			required="true" requiredMessage="Nie podano kodu pocztowego" 
-		       			converterMessage="wymagana liczba całkowita" 
-		       			validatorMessage="co najmniej 5 cyfr">
+		       			required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			converterMessage="#{txtRegErr.registerParamIncorrect}" 
+		       			validatorMessage="#{txtRegErr.registerValidationNum5}">
 		       			<f:validateLongRange minimum="5"/>
 		       		</p:inputText>
 		       		<p:message for="u-kod_pocztowy" />
 		       		
-		       		<p:outputLabel for="u-ulica" value="Ulica:"/>
+		       		<p:outputLabel for="u-ulica" value="#{txtReg.street}"/>
 		       		<p:inputText id="u-ulica" value="#{registrationBB.uzytkownik.ulica}" label="Ulica"
-		       			required="true" requiredMessage="Nie podano ulicy" 
-		       			validatorMessage="co najwyżej 30 znaków">
+		       			required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			validatorMessage="#{txtRegErr.registerValidationLengthTxt}">
 						<f:validateLength maximum="30" />
 		       		</p:inputText>
 		       		<p:message for="u-ulica" />		       		
 
 
-		       		<p:outputLabel for="u-nr_domu" value="Numer domu:"/>
+		       		<p:outputLabel for="u-nr_domu" value="#{txtReg.home_nr}"/>
 		       		<p:inputText id="u-nr_domu" value="#{registrationBB.uzytkownik.nr_domu}" label="Nr_domu"
-		       			required="true" requiredMessage="Nie podano numeru domu" 
-		       			converterMessage="wymagana liczba całkowita" 
-		       			validatorMessage="co najwyżej 30 znaków">
+		       			required="true" requiredMessage="#{txtRegErr.registerRequired}" 
+		       			converterMessage="#{txtRegErr.registerParamIncorrect}" 
+		       			validatorMessage="#{txtRegErr.registerValidationLengthTxt}">
 						<f:validateLength maximum="30" />
 		       		</p:inputText>
 		       		<p:message for="u-nr_domu" />
 		       			
-					<p:commandButton value="Zarejestruj" action="#{registrationBB.register()}" update="@form"/>
+					<p:commandButton value="#{txtReg.registerButton}" action="#{registrationBB.register()}" update="@form"/>
 		       		
 				</h:panelGrid>
 			</h:form>
 			
 			<h:form>	
-				<p:commandButton id="strona_logowania" value="Strona logowania" action="#{registrationBB.loginScreen()}"/>		
+				<p:commandButton id="strona_logowania" value="#{txtReg.loginPageButton}" action="#{registrationBB.loginScreen()}"/>		
 			</h:form>	
 			
 			<h:form>	

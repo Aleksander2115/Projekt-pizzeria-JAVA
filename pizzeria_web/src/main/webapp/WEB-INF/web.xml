@@ -12,7 +12,7 @@
     <param-value>Development</param-value>
   </context-param>
   <context-param>
-  	<param-name>prrimefaces.THEME</param-name>
+  	<param-name>primefaces.THEME</param-name>
   	<param-value>nova-light</param-value>
   </context-param>
   <servlet>
@@ -24,7 +24,7 @@
     <url-pattern>*.xhtml</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
-    <welcome-file>Registration.xhtml</welcome-file>
+    <welcome-file>Login.xhtml</welcome-file>
   </welcome-file-list>
 	<filter>
  	<filter-name>SecurityFilter</filter-name>
