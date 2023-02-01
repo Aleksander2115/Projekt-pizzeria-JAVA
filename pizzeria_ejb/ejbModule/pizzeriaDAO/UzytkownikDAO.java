@@ -98,14 +98,17 @@ public class UzytkownikDAO {
 		
 		if (login != null) {
 			query.setParameter("login", login);
+		}
+		
+		if (haslo != null) {
 			query.setParameter("haslo", haslo);
 		}
 		
 		try {
 			u = (Uzytkownik)query.getSingleResult();
+			u.getRolas().size();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
 		}
 		
 		return u;

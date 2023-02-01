@@ -10,9 +10,13 @@
 <ui:composition template="/templates/page-template.xhtml">
 	
 	<ui:define name="pageContent">
-		<p:panel header="#{txtMUP.yourOrders}">
+		<p:panel header="#{txtMUP.cart}">
 		
-			<p:dataTable value="#{orderBB.getOrderList()}" var="z" rendered="#{orderBB.getOrderList() != null}">
+			<h:form id="form-table3" style="margin-bottom:1em;">
+			
+			<p:messages id="msgs"/>
+			
+			<p:dataTable value="#{orderBB.viewCart()}" var="z">
 				
 				<p:column>
 					<f:facet name="header">
@@ -40,19 +44,65 @@
 						<h:outputText value="#{txtMUP.orderFullPrice}" />
 					</f:facet>
 					<h:outputText value="#{z.koszt_calkowity}" />
-				</p:column>					
-			</p:dataTable>
+				</p:column>				
+			
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{txtMUP.finalize}" />
+					</f:facet>
+					<p:commandButton id="Finalizuj" value="#{txtMUP.finalize}" action="#{orderBB.finalizeOrder(z)}" update="form-table3"/>
+				</p:column>			
 		
+
+			</p:dataTable>
+
+			<p:dataTable value="#{orderBB.viewPizzaCart()}" var="p">
+				
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{txtMUP.currentOrderPizza}" />
+					</f:facet>
+					<h:outputText value="#{p.nazwa}" />
+				</p:column>	
+			
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Opcje" />
+					</f:facet>
+					<p:commandButton id="Usuń" value="#{txtMUP.deleteButton}" action="#{orderBB.deletePizza(p)}" update="form-table3"/>
+				</p:column>		
+
+			</p:dataTable>
+			
+			
+			<p:dataTable value="#{orderBB.viewAdditionCart()}" var="d">
+				
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{txtMUP.currentOrderAddition}" />
+					</f:facet>
+					<h:outputText value="#{d.nazwa}" />
+				</p:column>	
+			
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Opcje" />
+					</f:facet>
+					<p:commandButton id="Usuń" value="#{txtMUP.deleteButton}" action="#{orderBB.deleteAddition(d)}" update="form-table3"/>
+				</p:column>		
+
+			</p:dataTable>
+			
+			</h:form>
+			
+
+			
 		</p:panel>
 		
-		
-		
-			
 
 		<p:panel header="#{txtMUP.menu}">
 		
 			<h:form id="form-table1" style="margin-bottom:1em;">
-			<p:messages id="msgs"/>
 				<p:panel header="#{txtMUP.pizzas}">
 					<p:dataTable value="#{mainUserPageBB.getPizzaList()}" var="p">
 							<p:column>
@@ -68,6 +118,13 @@
 								</f:facet>
 								<h:outputText value="#{p.nazwa}" />
 							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="#{txtMUP.size}" />
+								</f:facet>
+								<h:outputText value="#{p.rozmiar}" />
+							</p:column>							
 							
 							<p:column>
 								<f:facet name="header">
@@ -76,18 +133,18 @@
 								<h:outputText value="#{p.cena}" />
 							</p:column>
 							
+							
 							<p:column>
 								<f:facet name="header">
 									<h:outputText value="#{txtMUP.options}" />
 								</f:facet>
-								<p:commandButton id="Dodaj" value="#{txtMUP.addButton}" action="#{orderBB.orderPizza(p)}" update="@form"/>
+								<p:commandButton id="Dodaj" value="#{txtMUP.addButton}" action="#{orderBB.orderPizza(p)}" update="form-table3"/>
 							</p:column>								
 					</p:dataTable>
 				</p:panel>
 			</h:form>
 				
 				<h:form id="form-table2" style="margin-bottom:1em;">
-				<p:messages id="msgs"/>
 				<p:panel header="#{txtMUP.additions}">
 					<p:dataTable value="#{mainUserPageBB.getDodatekList()}" var="d">
 						
@@ -116,7 +173,7 @@
 							<f:facet name="header">
 								<h:outputText value="#{txtMUP.options}" />
 							</f:facet>
-							<p:commandButton id="Dodaj" value="#{txtMUP.addButton}" action="#{orderBB.orderAddition(d)}" update="@form"/>
+							<p:commandButton id="Dodaj" value="#{txtMUP.addButton}" action="#{orderBB.orderAddition(d)}" update="form-table3"/>
 						</p:column>								
 						
 					</p:dataTable>

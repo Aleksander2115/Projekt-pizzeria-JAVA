@@ -3,6 +3,7 @@ import javax.inject.Named;
 
 import pizzeria.entities.Uzytkownik;
 import pizzeriaDAO.UzytkownikDAO;
+import pizzeriaDAO.ZamowienieDAO;
 import pizzeria.entities.Dodatek;
 import pizzeria.entities.Pizza;
 import pizzeriaDAO.MainUserPageDAO;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.view.ViewScoped;
@@ -29,14 +31,25 @@ public class MainUserPageBB implements Serializable{
 
 	private Uzytkownik uzytkownik = new Uzytkownik();
 	
+	private Pizza pizza = new Pizza();
+	
 	@EJB
 	UzytkownikDAO uzytkownikDAO;
 	
 	@EJB
 	MainUserPageDAO mainUserPageDAO;
+	
+	@EJB
+	ZamowienieDAO zamowienieDAO;
 
 	@Inject
 	FacesContext context;
+	
+	@Inject
+	ExternalContext extctx;
+	
+	@Inject
+	Flash flash;
 
 	public Uzytkownik getUzytkownik() {
 		return uzytkownik;
@@ -58,7 +71,5 @@ public class MainUserPageBB implements Serializable{
 		listDodatek = mainUserPageDAO.getDodatekList();
 		
 		return listDodatek;
-	}
-	
-	
+	}	
 }

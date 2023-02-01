@@ -10,6 +10,7 @@ import pizzeriaDAO.ZamowienieDAO;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,14 +31,13 @@ import javax.servlet.http.HttpSession;
 @ViewScoped
 public class OrderBB implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
-	private int ID_Uzytkownik;
-	private int ID_Zamowienie;
-	private int ID_Pizza;
-	private int ID_Dodatek;
 
 	private Uzytkownik uzytkownik = new Uzytkownik();
 	
+	private Zamowienie zamowienie = new Zamowienie();
+	
+	private Pizza pizza = new Pizza();
+
 	@EJB
 	UzytkownikDAO uzytkownikDAO;
 	
@@ -51,81 +51,133 @@ public class OrderBB implements Serializable{
 	ExternalContext extctx;
 	
 	@Inject
+	Flash flash;
+	
+	@Inject
 	@ManagedProperty("#{txtMUPErr}")
 	private ResourceBundle txtMUPErr;
 
 	public Uzytkownik getUzytkownik() {
 		return uzytkownik;
 	}
-
 	
-	public List<Zamowienie> getOrderList(){
-		
-		List<Zamowienie> list = null;
-		
-		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
-		ID_Uzytkownik = (Integer) sessionZam.getAttribute("ID_Uzytkownik");
-		
-		list = zamowienieDAO.getOrderList(ID_Uzytkownik);
-		
-		return list;
+	public Pizza getPizza() {
+		return pizza;
 	}
-	
-	
-//	public List<Pizza> orderPizzaLive(){
-//		List<Pizza> list = null;
+
+//	public List<Zamowienie> getOrderList(){  ---> historia zamowien
+//		
+//		List<Zamowienie> list = null;
 //		
 //		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
-//		ID_Zamowienie = (Integer) sessionZam.getAttribute("ID_Zamowienie");
+//		ID_Uzytkownik = (Integer) sessionZam.getAttribute("ID_Uzytkownik");
 //		
-//		list = zamowienieDAO.getOrderedPizza(ID_Zamowienie);
+//		list = zamowienieDAO.getOrderList(ID_Uzytkownik);
 //		
 //		return list;
 //	}
 	
 	
+	public Zamowienie viewCart() {
+		
+		Zamowienie z = null;
+		
+		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
+		uzytkownik = (Uzytkownik) sessionZam.getAttribute("Uzytkownik");
+		
+		z = zamowienieDAO.viewCart(uzytkownik);
+		
+		if (z == null) {
+			zamowienieDAO.getCart(uzytkownik);
+		}
+		
+		return z;
+	}
+	
 	public void orderPizza(Pizza pizza) {
 		
 		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
-		ID_Zamowienie = (Integer) sessionZam.getAttribute("ID_Zamowienie");
+		zamowienie = (Zamowienie) sessionZam.getAttribute("Zamowienie");
+		uzytkownik = (Uzytkownik) sessionZam.getAttribute("Uzytkownik");
 		
-		zamowienieDAO.insertPizzaOrder(pizza.getID_Pizza(), ID_Zamowienie);
-		
-		zamowienieDAO.changeOrderStatus(ID_Zamowienie, 1);
+		zamowienieDAO.insertPizzaOrder(pizza, zamowienie);
 		
 		context.addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_INFO, txtMUPErr.getString("addToOrderPizza"), null));
 	}
 	
+	public List<Pizza> viewPizzaCart() {
+		
+		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
+		
+		Zamowienie z = (Zamowienie) sessionZam.getAttribute("Zamowienie");
+		
+		if (z != null) {
+			zamowienie = z;
+		}
+		
+		List<Pizza> list = zamowienieDAO.viewPizzas(zamowienie);
+		
+		return list;
+	}
 	
 	public void orderAddition(Dodatek dodatek) {
 		
 		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
-		ID_Zamowienie = (Integer) sessionZam.getAttribute("ID_Zamowienie");
+		zamowienie = (Zamowienie) sessionZam.getAttribute("Zamowienie");
 		
-		zamowienieDAO.insertAdditionOrder(dodatek.getID_Dodatek(), ID_Zamowienie);
+		zamowienieDAO.insertAdditionOrder(dodatek, zamowienie);
 		
 		context.addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_INFO, txtMUPErr.getString("addToOrderAddition"), null));
 	}
 	
-	
-	public void deletePizzaLive() {
+	public List<Dodatek> viewAdditionCart() {
 		
 		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
-		ID_Zamowienie = (Integer) sessionZam.getAttribute("ID_Zamowienie");
 		
-		zamowienieDAO.deletePizza(ID_Zamowienie);
+		Zamowienie z = (Zamowienie) sessionZam.getAttribute("Zamowienie");
 		
+		if (z != null) {
+			zamowienie = z;
+		}
+		
+		List<Dodatek> list = zamowienieDAO.viewAdditions(zamowienie);
+		
+		return list;
+	}
+	
+	public String finalizeOrder(Zamowienie zamowienie) {
+		
+		zamowienieDAO.changeOrderStatus(zamowienie, 1);
+		
+		return "MainUserPage?faces-redirect=true";
 	}
 	
 	
-	public void deleteAdditionLive() {
+	public String deletePizza(Pizza pizza) {
 		
 		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
-		ID_Zamowienie = (Integer) sessionZam.getAttribute("ID_Zamowienie");
+		zamowienie = (Zamowienie) sessionZam.getAttribute("Zamowienie");
 		
-		zamowienieDAO.deleteAddition(ID_Zamowienie);
+		Pizza p = (Pizza) sessionZam.getAttribute("pizza");
 		
+		if (p != null) {
+			pizza = p;
+			sessionZam.removeAttribute("pizza");
+		}
+		
+		zamowienieDAO.deletePizza(zamowienie, pizza);
+		
+		return "MainUserPage?faces-redirect=true";
+	}
+	
+	
+	public void deleteAddition(Dodatek dodatek) {
+		
+		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
+		zamowienie = (Zamowienie) sessionZam.getAttribute("Zamowienie");
+		
+		zamowienieDAO.deleteAddition(zamowienie, dodatek);
 	}
 }

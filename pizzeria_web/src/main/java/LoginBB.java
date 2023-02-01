@@ -4,6 +4,7 @@ import javax.jms.Session;
 import javax.naming.ldap.ManageReferralControl;
 import javax.persistence.EntityManager;
 
+import pizzeria.entities.Rola;
 import pizzeria.entities.Uzytkownik;
 import pizzeriaDAO.UzytkownikDAO;
 import pizzeria.entities.Zamowienie;
@@ -37,8 +38,6 @@ public class LoginBB implements Serializable{
 	
 	private String login;
 	private String haslo;
-	private int ID_Zamowienie;
-	private int ID_Uzytkownik;
 	
 	public String getLogin() {
 		return login;
@@ -90,109 +89,53 @@ public class LoginBB implements Serializable{
 
 	public String login() {	
 		
-		context.getCurrentInstance();
-		
 		RemoteClient<Uzytkownik> client = new RemoteClient<Uzytkownik>();
 		HttpSession sessionZam = (HttpSession) extctx.getSession(true);
+				
+		Uzytkownik uzytkownik = new Uzytkownik();
 		
-		if (!uzytkownik.getLogin().equals("Admin") && !uzytkownik.getLogin().equals("Mod"))
-			uzytkownik = uzytkownikDAO.getUserFromDB(uzytkownik.getLogin(), uzytkownik.getHaslo());
+		uzytkownik = uzytkownikDAO.getUserFromDB(this.uzytkownik.getLogin(), this.uzytkownik.getHaslo());
 		
 		if (uzytkownik == null) {
 			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, txtLogErr.getString("loginUserExists"), null));
-			logout();
 			return null;
 		}  
 		
-		if (uzytkownik.getLogin().equals("Mod") && uzytkownik.getHaslo().equals("Mod")) {
-			
-			uzytkownik.setID_Uzytkownik(-1);
-			uzytkownik.setImie("Mod");
-			uzytkownik.setNazwisko("Mod");
-			uzytkownik.setNr_telefonu(222222222);
-			uzytkownik.setMiejscowosc("Mod");
-			uzytkownik.setKod_pocztowy(22222);
-			uzytkownik.setUlica("Mod");
-			uzytkownik.setNr_domu("Mod");
-			
-			client.getRoles().add("Mod");
-			
-			HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-			client.store(request);
-			
-			sessionZam.setAttribute("ID_Uzytkownik", uzytkownik.getID_Uzytkownik());
-			
-			return "Mod?faces-redirect=true";
+		if (uzytkownik.getRolas() != null) {
+			for (Rola role: uzytkownik.getRolas()) {
+				client.getRoles().add(role.getNazwa_roli());
+			}
+		} else {
+			context.addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Puste roles", null));
+			return null;
 		}
 		
-		if (uzytkownik.getLogin().equals("Admin") && uzytkownik.getHaslo().equals("Admin")) {
-			
-			uzytkownik.setID_Uzytkownik(-1);
-			uzytkownik.setImie("Admin");
-			uzytkownik.setNazwisko("Admin");
-			uzytkownik.setNr_telefonu(222222222);
-			uzytkownik.setMiejscowosc("Admin");
-			uzytkownik.setKod_pocztowy(22222);
-			uzytkownik.setUlica("Admin");
-			uzytkownik.setNr_domu("Admin");
-			
-			client.getRoles().add("Admin");
-			
-			HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-			client.store(request);
-			
-			sessionZam.setAttribute("ID_Uzytkownik", uzytkownik.getID_Uzytkownik());
-			
-			return "Admin?faces-redirect=true";
-		}
-		
-		
-			client.setDetails(uzytkownik);
-		
-		//List<String> roles = uzytkownikDAO.getRolesFromDB(uzytkownik);
-		
-		client.getRoles().add("User");
-		
-//		if (roles != null) {
-//			for (String role: roles) {
-//				r.getRoles().add(role);
-//			}
-//		} else {
-//			context.addMessage(null,
-//					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Puste roles", null));
-//			return null;
-//		}
+		client.setDetails(uzytkownik);
 		
 		HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
 		client.store(request);
 		
-		zamowienieDAO.createOrder(uzytkownik.getID_Uzytkownik());
-
-		zamowienie = zamowienieDAO.getOrder(uzytkownik.getID_Uzytkownik());
+		sessionZam.setAttribute("Uzytkownik", uzytkownik);
 		
-		sessionZam.setAttribute("ID_Zamowienie", zamowienie.getID_Zamowienie());
-		sessionZam.setAttribute("ID_Uzytkownik", uzytkownik.getID_Uzytkownik());
+		if (uzytkownik.getLogin().equals("Mod")) {	
+			return "Mod?faces-redirect=true";
+		}
+		
+		if (uzytkownik.getLogin().equals("Admin")) {
+			return "Admin?faces-redirect=true";
+		}
+							
+		zamowienie = zamowienieDAO.getCart(uzytkownik);
+		
+		sessionZam.setAttribute("Zamowienie", getZamowienie());
 		
 		return "MainUserPage?faces-redirect=true";
 	}
 	
 	
 	public String logout() {
-		
-		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
-		
-		ID_Uzytkownik = (Integer)sessionZam.getAttribute("ID_Uzytkownik"); 
-		
-		if (ID_Uzytkownik != -1) {
-			
-			ID_Zamowienie = (Integer) sessionZam.getAttribute("ID_Zamowienie");
-			
-			zamowienie = zamowienieDAO.getOrder(ID_Uzytkownik);
-			
-			if (zamowienie.getStatus() == 0)
-				zamowienieDAO.deleteOrder(ID_Zamowienie, 0);
-		}
 		
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 				.getSession(true);

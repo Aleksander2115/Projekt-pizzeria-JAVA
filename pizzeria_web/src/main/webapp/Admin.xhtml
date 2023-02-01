@@ -36,22 +36,6 @@
 							<h:outputText value="#{u.login}" />
 						</p:column>
 
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="ID roli" />
-							</f:facet>
-							
-						</p:column>
-
-						<p:column>
-							<f:facet name="header">
-								<h:outputText value="Zmień rolę na" />
-							</f:facet>
-							<p:commandButton id="changeToMod" value="Mod" action="#{adminBB.changeToMod(u)}" process="@this"/>
-							<p:commandButton id="changeToAdmin" value="Admin" action="#{adminBB.changeToAdmin(u)}" process="@this"/>
-							<p:commandButton id="changeToUser" value="User" action="#{adminBB.changeToUser(u)}" process="@this"/>
-						</p:column>	
-
 					</p:dataTable>
 				</h:form>
 		

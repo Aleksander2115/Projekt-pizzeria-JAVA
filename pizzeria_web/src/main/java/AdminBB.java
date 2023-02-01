@@ -94,7 +94,7 @@ public class AdminBB implements Serializable{
 	@PostConstruct
     public void init() {
         lazyModel = new LazyDataModel<Uzytkownik>() {
-            //Potrzebna jest tylko metoda load
+            
             @Override
             public List<Uzytkownik> load(int first, int pageSize, Map<String, SortMeta> sortBy,
                     Map<String, FilterMeta> filterBy) {

@@ -10,6 +10,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import pizzeria.entities.Pizza;
+import pizzeria.entities.Dodatek;
+import pizzeria.entities.Uzytkownik;
 import pizzeria.entities.Zamowienie;
 
 @Stateless
@@ -45,80 +47,123 @@ public class ZamowienieDAO {
 		return list;
 	}
 	
-	public List<Zamowienie> getOrderList(int ID_Uzytkownik) {
-		List<Zamowienie> list = null;
-
-		Query query = em.createQuery("select z from Zamowienie z where z.uzytkownik.ID_Uzytkownik = :ID_Uzytkownik");
-		
-		query.setParameter("ID_Uzytkownik", ID_Uzytkownik);
-			
-		try {
-			list = query.getResultList();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return list;
-	}
-	
-	public void insertPizzaOrder(int ID_Pizza, int ID_Zamowienie) {
-		
-		Query query = em.createNativeQuery("insert into zamowienie_pizza (ID_Pizza, ID_Zamowienie) values (?, ?)");
-		
-		query.setParameter(1, ID_Pizza);
-		query.setParameter(2, ID_Zamowienie);
-		query.executeUpdate();
-	}
-	
-	public void insertAdditionOrder(int ID_Dodatek, int ID_Zamowienie) {
-		
-		Query query = em.createNativeQuery("insert into zamowienie_dodatek (ID_Dodatek, ID_Zamowienie) values (?, ?)");
-		
-		query.setParameter(1, ID_Dodatek);
-		query.setParameter(2, ID_Zamowienie);
-		query.executeUpdate();
-	}
-	
-//	public List<Pizza> getOrderedPizza(int ID_Zamowienie) {
+//	public List<Zamowienie> getCartOrderList(Uzytkownik uzytkownik) {
 //		
-//		List<Pizza> list = null;
+//		List<Zamowienie> list = null;
+//
+//		Query query = em.createQuery("select z from Zamowienie z where z.uzytkownik.ID_Uzytkownik = :ID_Uzytkownik and z.status = 0");
 //		
-//		Query query = em.createQuery("select p from Pizza p where ");
-//		
-//		list = query.getResultList();
-//		
+//		query.setParameter("ID_Uzytkownik", uzytkownik.getID_Uzytkownik());
+//			
+//		try {
+//			list = query.getResultList();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
 //		return list;
 //	}
 	
-	public Zamowienie getOrder(int ID_Uzytkownik) {
+	public Zamowienie getCart(Uzytkownik u) {
 		
 		Zamowienie z = null;
 		
-		Query query = em.createQuery("select z from Zamowienie z where z.uzytkownik.ID_Uzytkownik = :ID_Uzytkownik");
+		Query query = em.createQuery("select z from Zamowienie z where z.uzytkownik.ID_Uzytkownik = :ID_Uzytkownik and z.status = 0");
 		
-		query.setParameter("ID_Uzytkownik", ID_Uzytkownik);
+		query.setParameter("ID_Uzytkownik", u.getID_Uzytkownik());
 		
-		z = (Zamowienie)query.getSingleResult();
+		try {
+			z = (Zamowienie) query.getSingleResult();
+		} catch (Exception e) {}
+		
+		if (z == null) {
+			z = new Zamowienie();
+			z.setUzytkownik(u);
+			z.setStatus(0);
+			em.persist(z);
+			em.flush();
+		}
 		
 		return z;
 	}
 	
-	public void createOrder(int ID_Uzytkownik) {
+	public Zamowienie viewCart(Uzytkownik u) {
 		
-		Query query = em.createNativeQuery("insert into Zamowienie (ID_Uzytkownik, cena_dostawy, koszt_calkowity, status) values (?,?,?,?)");
+		Zamowienie z = null;
 		
-		query.setParameter(1, ID_Uzytkownik);
-		query.setParameter(2, "0");
-		query.setParameter(3, "0");
-		query.setParameter(4, "0");
-		query.executeUpdate();
+		Query query = em.createQuery("select z from Zamowienie z where z.uzytkownik.ID_Uzytkownik = :ID_Uzytkownik and z.status = 0");
+		
+		query.setParameter("ID_Uzytkownik", u.getID_Uzytkownik());
+		
+		try {
+			z = (Zamowienie) query.getSingleResult();
+		} catch (Exception e) {}
+		
+		return z;
 	}
 	
-	public void changeOrderStatus(int ID_Zamowienie, int numerStatusu) {
+//	public List<Pizza> getPizzas() {
+//		
+//		List<Pizza> list = null;
+//		
+//		Query query = em.createQuery("select p from Pizza p");
+//		
+//		try {
+//			list = query.getResultList();
+//		} catch (Exception e) {}
+//		
+//		return list;
+//	}
+	
+	public void insertPizzaOrder(Pizza pizza, Zamowienie zamowienie) {
 		
-		Query query = em.createQuery("update Zamowienie set Status = :Status where ID_Zamowienie = :ID_Zamowienie");
+		//Zamowienie z = em.find(Zamowienie.class, zamowienie.getID_Zamowienie());
 		
-		query.setParameter("ID_Zamowienie", ID_Zamowienie);
+		Zamowienie z = em.merge(zamowienie);
+		
+		z.getPizzas().add(pizza);
+		
+		//em.merge(z);
+	}
+	
+	public List<Pizza> viewPizzas(Zamowienie zamowienie) {
+		
+		if (zamowienie == null || zamowienie.getID_Zamowienie() == 0) {
+			return null;
+		}
+				
+		Zamowienie z = (Zamowienie) em.find(Zamowienie.class, zamowienie.getID_Zamowienie());
+		
+		z.getPizzas().size();
+		
+		return z.getPizzas();
+	}
+	
+	public void insertAdditionOrder(Dodatek dodatek, Zamowienie zamowienie) {
+
+		Zamowienie z = em.find(Zamowienie.class, zamowienie.getID_Zamowienie());
+		
+		z.getDodateks().add(dodatek);
+	}
+	
+	public List<Dodatek> viewAdditions(Zamowienie zamowienie) {
+		
+		if (zamowienie == null || zamowienie.getID_Zamowienie() == 0) {
+			return null;
+		}
+				
+		Zamowienie z = (Zamowienie) em.find(Zamowienie.class, zamowienie.getID_Zamowienie());
+		
+		z.getDodateks().size();
+		
+		return z.getDodateks();
+	}
+	
+	public void changeOrderStatus(Zamowienie zamowienie, int numerStatusu) {
+		
+		Query query = em.createQuery("update Zamowienie set status = :Status where ID_Zamowienie = :ID_Zamowienie");
+		
+		query.setParameter("ID_Zamowienie", zamowienie.getID_Zamowienie());
 		query.setParameter("Status", numerStatusu);
 		query.executeUpdate();
 	}
@@ -142,19 +187,27 @@ public class ZamowienieDAO {
 		query.executeUpdate();
 	}
 	
-	public void deletePizza(int ID_Zamowienie) {
+	public void deletePizza(Zamowienie zamowienie, Pizza pizza) {
 		
-		Query query = em.createNativeQuery("delete from zamowienie_pizza where ID_Zamowienie = :ID_Zamowienie");
-		query.setParameter("ID_Zamowienie", ID_Zamowienie);
+		Query query = em.createNativeQuery("delete from zamowienie_pizza where ID_Zamowienie = :ID_Zamowienie and ID_Pizza = :ID_Pizza");
+		query.setParameter("ID_Zamowienie", zamowienie.getID_Zamowienie());
+		query.setParameter("ID_Pizza", pizza.getID_Pizza());
 		
 		query.executeUpdate();
+		
+//		Zamowienie z = em.merge(zamowienie);
+//		
+//		Pizza p = em.merge(pizza);
+//		
+//		z.getPizzas().remove(p);
 	}
 	
-	public void deleteAddition(int ID_Zamowienie) {
+	public void deleteAddition(Zamowienie zamowienie, Dodatek dodatek) {
 		
-		Query query = em.createNativeQuery("delete from zamowienie_dodatek where ID_Zamowienie = :ID_Zamowienie");
-		query.setParameter("ID_Zamowienie", ID_Zamowienie);
+		Query query = em.createNativeQuery("delete from zamowienie_dodatek where ID_Zamowienie = :ID_Zamowienie and ID_Dodatek = :ID_Dodatek");
+		query.setParameter("ID_Zamowienie", zamowienie.getID_Zamowienie());
+		query.setParameter("ID_Dodatek", dodatek.getID_Dodatek());
 		
-		query.executeUpdate();
+		query.executeUpdate();		
 	}
 }
