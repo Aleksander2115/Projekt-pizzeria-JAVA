@@ -109,14 +109,13 @@ public class OrderBB implements Serializable{
 	public List<Pizza> viewPizzaCart() {
 		
 		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
+		Uzytkownik u = (Uzytkownik) sessionZam.getAttribute("Uzytkownik");
 		
-		Zamowienie z = (Zamowienie) sessionZam.getAttribute("Zamowienie");
-		
-		if (z != null) {
-			zamowienie = z;
+		if (u != null) {
+			uzytkownik = u;
 		}
 		
-		List<Pizza> list = zamowienieDAO.viewPizzas(zamowienie);
+		List<Pizza> list = zamowienieDAO.viewPizzas(zamowienieDAO.viewCart(uzytkownik));
 		
 		return list;
 	}
@@ -136,13 +135,13 @@ public class OrderBB implements Serializable{
 		
 		HttpSession sessionZam = (HttpSession) extctx.getSession(false);
 		
-		Zamowienie z = (Zamowienie) sessionZam.getAttribute("Zamowienie");
+		Uzytkownik u = (Uzytkownik) sessionZam.getAttribute("Uzytkownik");
 		
-		if (z != null) {
-			zamowienie = z;
+		if (u != null) {
+			uzytkownik = u;
 		}
 		
-		List<Dodatek> list = zamowienieDAO.viewAdditions(zamowienie);
+		List<Dodatek> list = zamowienieDAO.viewAdditions(zamowienieDAO.viewCart(uzytkownik));
 		
 		return list;
 	}
